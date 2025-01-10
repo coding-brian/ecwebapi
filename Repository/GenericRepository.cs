@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace EcWebapi.Repository
 {
-    public class GenericRepositiry<T>(EcDbContext context) where T : Entity
+    public class GenericRepository<T>(EcDbContext context) where T : Entity
     {
         private readonly EcDbContext _context = context;
 
@@ -21,7 +21,6 @@ namespace EcWebapi.Repository
 
         public async Task CreateAsync(T entity)
         {
-            entity.Id = Guid.NewGuid();
             entity.CreationTime = DateTime.Now;
             await _context.Set<T>().AddAsync(entity);
         }
@@ -40,13 +39,13 @@ namespace EcWebapi.Repository
 
         public void HardDelete(T entity)
         {
-            _context.Entry<T>(entity).State = EntityState.Deleted;
+            _context.Set<T>().Remove(entity);
         }
 
         public async Task HardDeleteById(Guid id)
         {
             var entity = await _context.Set<T>().FirstOrDefaultAsync(entity => entity.Id == id);
-            if (entity != null) _context.Entry<T>(entity).State = EntityState.Deleted;
+            if (entity != null) HardDelete(entity);
         }
 
         /// <summary>

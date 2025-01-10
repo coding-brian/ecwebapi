@@ -2,6 +2,7 @@
 using EcWebapi.Database;
 using EcWebapi.Database.Table;
 using EcWebapi.Dto;
+using EcWebapi.Repository;
 
 namespace EcWebapi.Services
 {
@@ -11,13 +12,11 @@ namespace EcWebapi.Services
 
         private readonly EcDbContext _context = context;
 
+        private readonly MemberRepository _memberRepository;
+
         public async Task<bool> RegisterAsync(MemberDto dto)
         {
-            var member = _mapper.Map<Member>(dto);
-            member.Id = Guid.NewGuid();
-            await _context.Members.AddAsync(member);
-            await _context.SaveChangesAsync();
-
+            await _memberRepository.CreateAsync(_mapper.Map<Member>(dto));
             return true;
         }
     }
