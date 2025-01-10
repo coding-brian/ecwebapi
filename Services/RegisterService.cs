@@ -5,17 +5,11 @@ using EcWebapi.Dto;
 
 namespace EcWebapi.Services
 {
-    public class RegisterService
+    public class RegisterService(IMapper mapper, EcDbContext context)
     {
-        public RegisterService(IMapper mapper, EcDbContext context)
-        {
-            _mapper = mapper;
-            _context = context;
-        }
+        private readonly IMapper _mapper = mapper;
 
-        private readonly IMapper _mapper;
-
-        private readonly EcDbContext _context;
+        private readonly EcDbContext _context = context;
 
         public async Task<bool> RegisterAsync(MemberDto dto)
         {
