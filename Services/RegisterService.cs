@@ -1,18 +1,15 @@
 ﻿using AutoMapper;
-using EcWebapi.Database;
 using EcWebapi.Database.Table;
 using EcWebapi.Dto;
 using EcWebapi.Repository;
 
 namespace EcWebapi.Services
 {
-    public class RegisterService(IMapper mapper, EcDbContext context)
+    public class RegisterService(IMapper mapper, MemberRepository memberRepository)
     {
         private readonly IMapper _mapper = mapper;
 
-        private readonly EcDbContext _context = context;
-
-        private readonly MemberRepository _memberRepository;
+        private readonly MemberRepository _memberRepository = memberRepository;
 
         public async Task<bool> RegisterAsync(MemberDto dto)
         {
