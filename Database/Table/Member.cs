@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace EcWebapi.Database.Table;
 
@@ -51,5 +48,5 @@ public class Member : Entity
     /// 性別(0:男、1:女、2:不分)
     /// </summary>
     [Column("gender")]
-    public sbyte? Gender { get; set; }
+    public int? Gender { get; set; }
 }
