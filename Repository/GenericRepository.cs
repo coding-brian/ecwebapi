@@ -22,6 +22,7 @@ namespace EcWebapi.Repository
         public async Task CreateAsync(T entity)
         {
             entity.CreationTime = DateTime.Now;
+            entity.EntityStatus = true;
             await _context.Set<T>().AddAsync(entity);
         }
 

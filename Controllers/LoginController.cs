@@ -1,15 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EcWebapi.Dto;
+using EcWebapi.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EcWebapi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
-    public class LoginController : ControllerBase
+    public class LoginController(MemberService memberService) : ControllerBase
     {
+        private readonly MemberService _memberService = memberService;
+
         [HttpGet]
-        public IActionResult Login()
+        public async Task<IActionResult> LoginAsync([FromQuery] LoginDto dto)
         {
-            return Ok();
+            var token = await _memberService.Login(dto);
+
+            if (token == null) return BadRequest();
+
+            return Ok(token);
         }
     }
 }

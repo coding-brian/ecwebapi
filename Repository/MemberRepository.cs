@@ -8,7 +8,7 @@ namespace EcWebapi.Repository
         public new async Task CreateAsync(Member dto)
         {
             dto.Id = Guid.NewGuid();
-            await CreateAsync(dto);
+            await base.CreateAsync(dto);
         }
     }
 }
