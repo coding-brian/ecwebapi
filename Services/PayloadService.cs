@@ -10,10 +10,12 @@ namespace EcWebapi.Services
         public PayloadDto GetPayload()
         {
             var claims = _httpContextAccessor.HttpContext.User.Claims;
+            Guid.TryParse(claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Sub)?.Value, out Guid id);
+
             return new PayloadDto()
             {
-                Id = Guid.Parse(claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Sub).Value),
-                Eamil = claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Email).Value
+                Id = id,
+                Eamil = claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Email)?.Value
             };
         }
     }

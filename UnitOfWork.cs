@@ -1,19 +1,22 @@
 ﻿using EcWebapi.Database;
+using EcWebapi.Database.Table;
 using EcWebapi.Repository;
 
 namespace EcWebapi
 {
-    public class UnitOfWork(EcDbContext context, MemberRepository memberRepository) : IDisposable
+    public class UnitOfWork(EcDbContext context, GenericRepository<Member> memberRepository, GenericRepository<MemberCaptcha> memberCaptchaRepository) : IDisposable
     {
         private readonly EcDbContext _context = context;
 
-        public MemberRepository MemberRepository = memberRepository;
+        public GenericRepository<Member> MemberRepository = memberRepository;
+
+        public GenericRepository<MemberCaptcha> MemberCaptchaRepository = memberCaptchaRepository;
 
         private bool disposed = false;
 
-        public void Save()
+        public async Task SaveChangesAsync()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         protected virtual void Dispose(bool disposing)

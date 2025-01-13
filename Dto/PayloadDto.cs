@@ -2,7 +2,7 @@
 {
     public class PayloadDto
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
         public string Eamil { get; set; }
     }

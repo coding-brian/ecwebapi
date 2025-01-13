@@ -21,7 +21,7 @@ namespace EcWebapi.Services
             {
                 AccessToken = accessToken,
                 RefreshToken = GenerateJwtToken(member, TokenType.RefreshToken),
-                ExpireIn = TimeSpan.FromHours(1).TotalSeconds - 1,
+                ExpiresIn = TimeSpan.FromHours(1).TotalSeconds - 1,
             };
         }
 

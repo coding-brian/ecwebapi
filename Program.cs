@@ -1,6 +1,7 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using EcWebapi.Database;
+using EcWebapi.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -42,7 +43,12 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
     containerBuilder.RegisterAssemblyTypes(typeof(Program).Assembly)
                     .AsSelf()
-                    .AsImplementedInterfaces();
+                    .AsImplementedInterfaces()
+                    .InstancePerLifetimeScope();
+
+    containerBuilder.RegisterGeneric(typeof(GenericRepository<>))
+                    .As(typeof(GenericRepository<>))
+                    .InstancePerLifetimeScope();
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

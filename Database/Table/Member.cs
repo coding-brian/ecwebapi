@@ -49,4 +49,10 @@ public class Member : Entity
     /// </summary>
     [Column("gender")]
     public int? Gender { get; set; }
+
+    /// <summary>
+    /// 是否啟用
+    /// </summary>
+    [Column("is_active")]
+    public bool IsActive { get; set; }
 }

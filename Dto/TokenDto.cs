@@ -8,6 +8,8 @@
         /// <summary>
         /// 幾秒後到期
         /// </summary>
-        public double ExpireIn { get; set; }
+        public double ExpiresIn { get; set; }
+
+        public string TokenType { get; set; } = "Bearer";
     }
 }

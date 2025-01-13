@@ -1,6 +1,7 @@
 ﻿using EcWebapi.Database;
 using EcWebapi.Database.Table;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System.Linq.Expressions;
 
 namespace EcWebapi.Repository
@@ -23,7 +24,15 @@ namespace EcWebapi.Repository
         {
             entity.CreationTime = DateTime.Now;
             entity.EntityStatus = true;
+            entity.Id = Guid.NewGuid();
             await _context.Set<T>().AddAsync(entity);
+            Log.Information(_context.Entry(entity).State.ToString());
+            Log.Information(_context.ChangeTracker.DebugView.LongView);
+        }
+
+        public void Update(T entity)
+        {
+            entity.ModificationTime = DateTime.Now;
         }
 
         public void Delete(T entity)
