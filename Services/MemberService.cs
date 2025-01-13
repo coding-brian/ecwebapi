@@ -63,6 +63,10 @@ namespace EcWebapi.Services
 
         public async Task<bool> ValidateCaptchaAsync(MemberCaptchaDto dto)
         {
+            var member = await _unitOfWork.MemberRepository.GetAsync(m => m.Id == dto.MemberId && m.EntityStatus);
+
+            if (member == null) return false;
+
             var memberCaptchas = await _unitOfWork.MemberCaptchaRepository.GetListAsync(captcha => captcha.MemberId == dto.MemberId && captcha.IsValidated == false && captcha.EntityStatus);
             var memberCaptcha = memberCaptchas.OrderByDescending(captcha => captcha.CreationTime).FirstOrDefault();
 
@@ -70,8 +74,12 @@ namespace EcWebapi.Services
 
             if (memberCaptcha.Code != dto.Code) return false;
 
+            member.IsActive = true;
+            _unitOfWork.MemberRepository.Update(member);
+
             memberCaptcha.IsValidated = true;
             memberCaptcha.ModifyBy = _payload.Id.Value;
+
             _unitOfWork.MemberCaptchaRepository.Update(memberCaptcha);
             await _unitOfWork.SaveChangesAsync();
 
