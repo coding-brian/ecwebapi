@@ -16,6 +16,32 @@ Log.Logger = new LoggerConfiguration()
 
 var builder = WebApplication.CreateBuilder(args);
 
+var corsPolicyName = "MyCorsPolicy";
+builder.Services.AddCors(options =>
+{
+    var allowHosts = builder.Configuration.GetSection("AllowedHosts").ToString();
+
+    if (builder.Environment.IsDevelopment())
+    {
+        options.AddPolicy(corsPolicyName, policy =>
+        {
+            policy.AllowAnyOrigin() // 允許的來源
+                  .AllowAnyHeader() // 允許的標頭
+                  .AllowAnyMethod(); // 允許的 HTTP 方法 (GET, POST, PUT, DELETE 等)
+        });
+    }
+    else
+    {
+        options.AddPolicy(corsPolicyName, policy =>
+        {
+            policy.WithOrigins(allowHosts) // 允許的來源
+                  .AllowAnyHeader() // 允許的標頭
+                  .AllowAnyMethod() // 允許的 HTTP 方法 (GET, POST, PUT, DELETE 等)
+                  .AllowCredentials(); // 如果需要攜帶 Cookie 或憑證
+        });
+    }
+});
+
 // 設定 JWT 驗證相關參數
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 
@@ -77,6 +103,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(corsPolicyName);
 
 app.UseAuthentication();
 app.UseAuthorization();
