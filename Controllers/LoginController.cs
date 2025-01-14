@@ -10,8 +10,8 @@ namespace EcWebapi.Controllers
     {
         private readonly MemberService _memberService = memberService;
 
-        [HttpGet]
-        public async Task<IActionResult> LoginAsync([FromQuery] LoginDto dto)
+        [HttpPost]
+        public async Task<IActionResult> LoginAsync([FromBody] LoginDto dto)
         {
             var token = await _memberService.Login(dto);
 
