@@ -27,28 +27,21 @@ namespace EcWebapi.Services
         {
             try
             {
-                var member = _mapper.Map<Member>(dto);
+                var member = await _unitOfWork.MemberRepository.GetAsync(e => e.Phone == dto.Phone && e.EntityStatus);
+
+                if (member != null) return false;
+
+                var memberCaptcha = _unitOfWork.MemberCaptchaRepository.Get(captcha => captcha.Phone == dto.Phone && captcha.EntityStatus)
+                                                                       .OrderByDescending(captcha => captcha.CreationTime)
+                                                                       .FirstOrDefault();
+
+                if (memberCaptcha.Code != dto.Captcha) return false;
+
+                member = _mapper.Map<Member>(dto);
                 member.Password = _passwordHasher.HashPassword(member, member.Password);
-                member.IsActive = false;
+                member.IsActive = true;
+
                 await _unitOfWork.MemberRepository.CreateAsync(member);
-
-                await _unitOfWork.SaveChangesAsync();
-
-                var random = new Random();
-                string code = "";
-
-                for (int i = 0; i < 4; i++)
-                {
-                    int digit = random.Next(0, 10);
-                    code += digit.ToString();
-                }
-
-                await _unitOfWork.MemberCaptchaRepository.CreateAsync(new MemberCaptcha()
-                {
-                    Code = code,
-                    IsValidated = false,
-                    MemberId = member.Id,
-                });
 
                 await _unitOfWork.SaveChangesAsync();
 
@@ -59,31 +52,6 @@ namespace EcWebapi.Services
                 Log.Error(ex, "Exception:");
                 return false;
             }
-        }
-
-        public async Task<bool> ValidateCaptchaAsync(MemberCaptchaDto dto)
-        {
-            var member = await _unitOfWork.MemberRepository.GetAsync(m => m.Id == dto.MemberId && m.EntityStatus);
-
-            if (member == null) return false;
-
-            var memberCaptchas = await _unitOfWork.MemberCaptchaRepository.GetListAsync(captcha => captcha.MemberId == dto.MemberId && captcha.IsValidated == false && captcha.EntityStatus);
-            var memberCaptcha = memberCaptchas.OrderByDescending(captcha => captcha.CreationTime).FirstOrDefault();
-
-            if (memberCaptcha == null) return false;
-
-            if (memberCaptcha.Code != dto.Code) return false;
-
-            member.IsActive = true;
-            _unitOfWork.MemberRepository.Update(member);
-
-            memberCaptcha.IsValidated = true;
-            memberCaptcha.ModifyBy = _payload.Id.Value;
-
-            _unitOfWork.MemberCaptchaRepository.Update(memberCaptcha);
-            await _unitOfWork.SaveChangesAsync();
-
-            return true;
         }
 
         public async Task<TokenDto> Login(LoginDto dto)
@@ -110,6 +78,39 @@ namespace EcWebapi.Services
                 Log.Error(ex, "Exception:");
                 return null;
             }
+        }
+
+        public async Task<string> CreateMemberCaptchaAsync(CreateCaptchaDto dto)
+        {
+            var member = await _unitOfWork.MemberRepository.GetAsync(e => e.Phone == dto.Phone && e.EntityStatus);
+
+            if (member != null) return null;
+
+            var timeDifference = DateTime.Now.AddSeconds(-30);
+
+            var memberCaptchas = await _unitOfWork.MemberCaptchaRepository.GetListAsync(captcha => captcha.Phone == dto.Phone
+                                                                                                   && captcha.CreationTime >= timeDifference
+                                                                                                   && captcha.EntityStatus);
+            if (memberCaptchas.Count > 0) return null;
+
+            var random = new Random();
+            string code = "";
+
+            for (int i = 0; i < 4; i++)
+            {
+                int digit = random.Next(0, 10);
+                code += digit.ToString();
+            }
+
+            await _unitOfWork.MemberCaptchaRepository.CreateAsync(new MemberCaptcha()
+            {
+                Code = code,
+                Phone = dto.Phone,
+            });
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return code;
         }
     }
 }

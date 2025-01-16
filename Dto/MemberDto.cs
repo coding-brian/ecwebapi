@@ -7,6 +7,7 @@ namespace EcWebapi.Dto
         /// <summary>
         /// 姓名
         /// </summary>
+        [Required]
         public string Name { get; set; }
 
         /// <summary>
@@ -15,14 +16,19 @@ namespace EcWebapi.Dto
         [Required]
         public string Password { get; set; }
 
+        [Required]
+        public string Captcha { get; set; }
+
         /// <summary>
         /// 信箱
         /// </summary>
+        [Required]
         public string Email { get; set; }
 
         /// <summary>
         /// 電話
         /// </summary>
+        [Required]
         public string Phone { get; set; }
 
         /// <summary>
@@ -33,6 +39,7 @@ namespace EcWebapi.Dto
         /// <summary>
         /// 性別(0:男、1:女、2:不分)
         /// </summary>
-        public int? Gender { get; set; }
+        [Required]
+        public int Gender { get; set; }
     }
 }

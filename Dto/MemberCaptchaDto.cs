@@ -2,8 +2,11 @@
 {
     public class MemberCaptchaDto
     {
-        public Guid MemberId { get; set; }
-
         public string Code { get; set; }
+
+        /// <summary>
+        /// 電話
+        /// </summary>
+        public string Phone { get; set; }
     }
 }

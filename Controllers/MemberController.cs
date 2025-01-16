@@ -24,10 +24,12 @@ namespace EcWebapi.Controllers
             return Ok(await _memberService.CreateAsync(dto));
         }
 
-        [HttpPut("captcha")]
-        public async Task<IActionResult> ValidateCaptchaAsync([FromBody] MemberCaptchaDto dto)
+        [HttpPost("captcha")]
+        public async Task<IActionResult> CreateCaptchaAsync([FromBody] CreateCaptchaDto dto)
         {
-            return Ok(await _memberService.ValidateCaptchaAsync(dto));
+            if (!ModelState.IsValid) return BadRequest();
+
+            return Ok(await _memberService.CreateMemberCaptchaAsync(dto));
         }
     }
 }
