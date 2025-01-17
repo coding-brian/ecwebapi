@@ -25,12 +25,12 @@ namespace EcWebapi.Services
             };
         }
 
-        public async Task<TokenDto> GetRefreshToken(string refreshToken)
+        public async Task<TokenDto> GetRefreshTokenAsync(RecreateTokenDto dto)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwtSettings = _configuration.GetSection("JwtSettings");
 
-            var principal = tokenHandler.ValidateToken(refreshToken, new TokenValidationParameters
+            var principal = tokenHandler.ValidateToken(dto.RefreshToken, new TokenValidationParameters
             {
                 ValidateIssuer = true,
                 ValidateAudience = true,
@@ -38,14 +38,19 @@ namespace EcWebapi.Services
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = jwtSettings["Issuer"],
                 ValidAudience = jwtSettings["Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]))
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"])),
             }, out SecurityToken validatedToken);
 
             // 驗證是否為合法的 Refresh Token
             if (validatedToken is JwtSecurityToken jwtToken &&
                 jwtToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
             {
-                var memberId = Guid.Parse(principal.Claims.FirstOrDefault(claim => claim.Type == "sub")?.Value);
+                var claims = principal.Claims.ToList();
+                foreach (var claim in claims)
+                {
+                    Console.WriteLine($"{claim.Type}: {claim.Value}");
+                }
+                var memberId = Guid.Parse(jwtToken.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Sub)?.Value);
                 var member = await _unitOfWork.MemberRepository.GetAsync(member => member.Id == memberId && member.EntityStatus);
 
                 return GetAccessToken(member);

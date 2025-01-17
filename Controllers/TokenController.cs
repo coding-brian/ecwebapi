@@ -1,4 +1,5 @@
-﻿using EcWebapi.Services;
+﻿using EcWebapi.Dto;
+using EcWebapi.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcWebapi.Controllers
@@ -10,9 +11,9 @@ namespace EcWebapi.Controllers
         private readonly TokenService _tokenService = tokenService;
 
         [HttpPost("refresh")]
-        public async Task<IActionResult> CreateRefreshToken(string refreshToken)
+        public async Task<IActionResult> CreateRefreshTokenAsync([FromBody] RecreateTokenDto dto)
         {
-            return Ok(await _tokenService.GetRefreshToken(refreshToken));
+            return Ok(await _tokenService.GetRefreshTokenAsync(dto));
         }
     }
 }
