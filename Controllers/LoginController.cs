@@ -13,11 +13,11 @@ namespace EcWebapi.Controllers
         [HttpPost]
         public async Task<IActionResult> LoginAsync([FromBody] LoginDto dto)
         {
-            var token = await _memberService.Login(dto);
+            var result = await _memberService.Login(dto);
 
-            if (token == null) return BadRequest();
+            if (!result.IsSuccess) return BadRequest(result);
 
-            return Ok(token);
+            return Ok(result.Data);
         }
     }
 }

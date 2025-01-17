@@ -1,5 +1,4 @@
 ﻿using EcWebapi.Dto;
-using EcWebapi.Enum;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,13 +14,14 @@ namespace EcWebapi.Services
 
         public TokenDto GetAccessToken(Database.Table.Member member)
         {
-            var accessToken = GenerateJwtToken(member, TokenType.AccessToken);
+            var accessTokenExpires = DateTime.Now.AddHours(1);
+            var refreshTokenExpires = DateTime.Now.AddMonths(1);
 
             return new TokenDto()
             {
-                AccessToken = accessToken,
-                RefreshToken = GenerateJwtToken(member, TokenType.RefreshToken),
-                ExpiresIn = TimeSpan.FromHours(1).TotalSeconds - 1,
+                AccessToken = GenerateJwtToken(member, accessTokenExpires),
+                RefreshToken = GenerateJwtToken(member, refreshTokenExpires),
+                ExpiresIn = TimeSpan.FromHours(1).TotalSeconds,
             };
         }
 
@@ -54,7 +54,7 @@ namespace EcWebapi.Services
             return null;
         }
 
-        public string GenerateJwtToken(Database.Table.Member member, TokenType tokenType)
+        public string GenerateJwtToken(Database.Table.Member member, DateTime expires)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!));
@@ -66,19 +66,6 @@ namespace EcWebapi.Services
                 new(JwtRegisteredClaimNames.Email, member.Email),
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
-
-            var expires = DateTime.UtcNow.AddHours(1);
-
-            switch (tokenType)
-            {
-                case TokenType.AccessToken:
-                    expires = DateTime.UtcNow.AddHours(1);
-                    break;
-
-                case TokenType.RefreshToken:
-                    expires = DateTime.UtcNow.AddMonths(1);
-                    break;
-            }
 
             var token = new JwtSecurityToken(
                 issuer: jwtSettings["Issuer"],
