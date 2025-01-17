@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EcWebapi.Database.Table;
 using EcWebapi.Dto;
+using EcWebapi.Dto.Member;
 
 namespace EcWebapi
 {
@@ -10,6 +11,10 @@ namespace EcWebapi
         {
             CreateMap<Member, MemberDto>();
             CreateMap<MemberDto, Member>();
+
+            CreateMap<UpdateMemberDto, Member>();
+
+            CreateMap<CreateMemberDto, Member>();
         }
     }
 }

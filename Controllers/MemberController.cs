@@ -1,5 +1,7 @@
 ﻿using EcWebapi.Dto;
+using EcWebapi.Dto.Member;
 using EcWebapi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcWebapi.Controllers
@@ -11,6 +13,7 @@ namespace EcWebapi.Controllers
         private readonly MemberService _memberService = memberService;
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAsync()
 
         {
@@ -18,16 +21,24 @@ namespace EcWebapi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] MemberDto dto)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateMemberDto dto)
 
         {
             return Ok(await _memberService.CreateAsync(dto));
         }
 
+        [HttpPut]
+        public async Task<IActionResult> PostAsync([FromBody] UpdateMemberDto dto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            return Ok(await _memberService.UpdateAsync(dto));
+        }
+
         [HttpPost("captcha")]
         public async Task<IActionResult> CreateCaptchaAsync([FromBody] CreateCaptchaDto dto)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
             return Ok(await _memberService.CreateMemberCaptchaAsync(dto));
         }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EcWebapi.Database.Table;
 using EcWebapi.Dto;
+using EcWebapi.Dto.Member;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
 
@@ -23,7 +24,33 @@ namespace EcWebapi.Services
             return _mapper.Map<MemberDto>(await _unitOfWork.MemberRepository.GetAsync(member => member.Id == _payload.Id && member.EntityStatus));
         }
 
-        public async Task<bool> CreateAsync(MemberDto dto)
+        public async Task<MemberDto> UpdateAsync(UpdateMemberDto dto)
+        {
+            try
+            {
+                var account = await _unitOfWork.MemberRepository.GetAsync(m => m.Phone == dto.Phone && m.EntityStatus);
+                if (account != null) return null;
+
+                var member = await _unitOfWork.MemberRepository.GetAsync(m => m.Id == dto.Id && m.EntityStatus);
+                if (member != null) return null;
+
+                member = _mapper.Map(dto, member);
+                member.Password = _passwordHasher.HashPassword(member, dto.Password);
+
+                _unitOfWork.MemberRepository.Update(member);
+
+                await _unitOfWork.SaveChangesAsync();
+
+                return _mapper.Map<MemberDto>(await _unitOfWork.MemberRepository.GetAsync(m => m.Id == dto.Id && m.EntityStatus));
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Exception:");
+                return null;
+            }
+        }
+
+        public async Task<bool> CreateAsync(CreateMemberDto dto)
         {
             try
             {
@@ -35,7 +62,7 @@ namespace EcWebapi.Services
                                                                        .OrderByDescending(captcha => captcha.CreationTime)
                                                                        .FirstOrDefault();
 
-                if (memberCaptcha.Code != dto.Captcha) return false;
+                if (memberCaptcha == null || memberCaptcha.Code != dto.Captcha) return false;
 
                 member = _mapper.Map<Member>(dto);
                 member.Password = _passwordHasher.HashPassword(member, member.Password);

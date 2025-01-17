@@ -1,14 +1,17 @@
 ﻿using EcWebapi.Database;
 using EcWebapi.Database.Table;
+using EcWebapi.Dto;
+using EcWebapi.Services;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
 using System.Linq.Expressions;
 
 namespace EcWebapi.Repository
 {
-    public class GenericRepository<T>(EcDbContext context) where T : Entity
+    public class GenericRepository<T>(EcDbContext context, PayloadService payloadService) where T : Entity
     {
         private readonly EcDbContext _context = context;
+
+        private readonly PayloadDto _payload = payloadService.GetPayload();
 
         public async Task<IList<T>> GetListAsync(Expression<Func<T, bool>> predicate)
         {
@@ -25,14 +28,16 @@ namespace EcWebapi.Repository
             entity.CreationTime = DateTime.Now;
             entity.EntityStatus = true;
             entity.Id = Guid.NewGuid();
+
+            entity.CreateBy = _payload.Id.Value;
+
             await _context.Set<T>().AddAsync(entity);
-            Log.Information(_context.Entry(entity).State.ToString());
-            Log.Information(_context.ChangeTracker.DebugView.LongView);
         }
 
         public void Update(T entity)
         {
             entity.ModificationTime = DateTime.Now;
+            if (_payload.Id != null) entity.ModifyBy = _payload.Id.Value;
         }
 
         public void Delete(T entity)

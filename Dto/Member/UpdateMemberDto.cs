@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EcWebapi.Dto
+namespace EcWebapi.Dto.Member
 {
-    public class MemberDto
+    public class UpdateMemberDto : EntityDto
     {
         /// <summary>
         /// 姓名
@@ -15,9 +15,6 @@ namespace EcWebapi.Dto
         /// </summary>
         [Required]
         public string Password { get; set; }
-
-        [Required]
-        public string Captcha { get; set; }
 
         /// <summary>
         /// 信箱
@@ -34,7 +31,8 @@ namespace EcWebapi.Dto
         /// <summary>
         /// 生日
         /// </summary>
-        public DateOnly? Birth { get; set; }
+        [Required]
+        public DateOnly Birth { get; set; }
 
         /// <summary>
         /// 性別(0:男、1:女、2:不分)
