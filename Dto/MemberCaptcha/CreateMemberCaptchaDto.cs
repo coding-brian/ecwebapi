@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EcWebapi.Dto
+namespace EcWebapi.Dto.MemberCaptcha
 {
-    public class CreateCaptchaDto
+    public class CreateMemberCaptchaDto
     {
         [Required]
         public string Phone { get; set; }

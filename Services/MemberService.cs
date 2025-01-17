@@ -1,13 +1,19 @@
 ﻿using AutoMapper;
+using EcWebapi.Const;
 using EcWebapi.Database.Table;
 using EcWebapi.Dto;
 using EcWebapi.Dto.Member;
+using EcWebapi.Dto.MemberCaptcha;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
 
 namespace EcWebapi.Services
 {
-    public class MemberService(IMapper mapper, TokenService tokenService, UnitOfWork unitOfWork, PayloadService payloadService)
+    public class MemberService(IMapper mapper,
+                               TokenService tokenService,
+                               UnitOfWork unitOfWork,
+                               PayloadService payloadService,
+                               ApiResponseService apiResponseService)
     {
         private readonly IMapper _mapper = mapper;
 
@@ -16,6 +22,7 @@ namespace EcWebapi.Services
         private readonly PasswordHasher<Member> _passwordHasher = new();
 
         private readonly TokenService _tokenService = tokenService;
+        private readonly ApiResponseService _apiResponseService = apiResponseService;
 
         private readonly PayloadDto _payload = payloadService.GetPayload();
 
@@ -81,33 +88,37 @@ namespace EcWebapi.Services
             }
         }
 
-        public async Task<TokenDto> Login(LoginDto dto)
+        public async Task<ApiResponseDto<TokenDto>> Login(LoginDto dto)
         {
             try
             {
                 var member = await _unitOfWork.MemberRepository.GetAsync(e => e.Phone == dto.Account && e.IsActive);
 
-                if (member == null) return null;
+                if (member == null) return await _apiResponseService.GetErrorAsync<TokenDto>(ApiResponseErrorCode.AccountError);
 
                 var result = _passwordHasher.VerifyHashedPassword(member, member.Password, dto.Password);
 
                 if (result == PasswordVerificationResult.Success)
                 {
-                    return _tokenService.GetAccessToken(member);
+                    return new ApiResponseDto<TokenDto>()
+                    {
+                        IsSuccess = true,
+                        Data = _tokenService.GetAccessToken(member)
+                    };
                 }
                 else
                 {
-                    return null;
+                    return await _apiResponseService.GetErrorAsync<TokenDto>(ApiResponseErrorCode.AccountOrPasswordError);
                 }
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Exception:");
-                return null;
+                return await _apiResponseService.GetErrorAsync<TokenDto>(ApiResponseErrorCode.SystemError);
             }
         }
 
-        public async Task<string> CreateMemberCaptchaAsync(CreateCaptchaDto dto)
+        public async Task<string> CreateMemberCaptchaAsync(CreateMemberCaptchaDto dto)
         {
             var member = await _unitOfWork.MemberRepository.GetAsync(e => e.Phone == dto.Phone && e.EntityStatus);
 

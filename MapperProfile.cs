@@ -15,6 +15,8 @@ namespace EcWebapi
             CreateMap<UpdateMemberDto, Member>();
 
             CreateMap<CreateMemberDto, Member>();
+
+            CreateMap<ApiResponse, ApiResponseErrorDto>();
         }
     }
 }

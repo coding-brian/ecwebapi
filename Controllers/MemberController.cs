@@ -1,5 +1,6 @@
 ﻿using EcWebapi.Dto;
 using EcWebapi.Dto.Member;
+using EcWebapi.Dto.MemberCaptcha;
 using EcWebapi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,7 @@ namespace EcWebapi.Controllers
         }
 
         [HttpPost("captcha")]
-        public async Task<IActionResult> CreateCaptchaAsync([FromBody] CreateCaptchaDto dto)
+        public async Task<IActionResult> CreateCaptchaAsync([FromBody] CreateMemberCaptchaDto dto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 

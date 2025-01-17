@@ -4,13 +4,18 @@ using EcWebapi.Repository;
 
 namespace EcWebapi
 {
-    public class UnitOfWork(EcDbContext context, GenericRepository<Member> memberRepository, GenericRepository<MemberCaptcha> memberCaptchaRepository) : IDisposable
+    public class UnitOfWork(EcDbContext context,
+                            GenericRepository<Member> memberRepository,
+                            GenericRepository<MemberCaptcha> memberCaptchaRepository,
+                            GenericRepository<ApiResponse> apiResponseRepository) : IDisposable
     {
         private readonly EcDbContext _context = context;
 
         public GenericRepository<Member> MemberRepository = memberRepository;
 
         public GenericRepository<MemberCaptcha> MemberCaptchaRepository = memberCaptchaRepository;
+
+        public GenericRepository<ApiResponse> ApiResponseRepository = apiResponseRepository;
 
         private bool disposed = false;
 
