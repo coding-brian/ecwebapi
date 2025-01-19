@@ -69,7 +69,8 @@ namespace EcWebapi.Services
             {
                 new(JwtRegisteredClaimNames.Sub, member.Id.ToString()),
                 new(JwtRegisteredClaimNames.Email, member.Email),
-                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(JwtRegisteredClaimNames.Name, member.Name)
             };
 
             var token = new JwtSecurityToken(
