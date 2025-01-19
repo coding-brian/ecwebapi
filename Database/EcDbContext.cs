@@ -10,5 +10,9 @@ namespace EcWebapi.Database
         public DbSet<Member> Members { get; set; }
         public DbSet<MemberCaptcha> MemberCaptchas { get; set; }
         public DbSet<ApiResponse> ApiResponses { get; set; }
+        public DbSet<Store> Stores { get; set; }
+        public DbSet<SoicalMedia> SoicalMedias { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<News> News { get; set; }
     }
 }
