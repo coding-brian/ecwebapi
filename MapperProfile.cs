@@ -17,6 +17,18 @@ namespace EcWebapi
             CreateMap<CreateMemberDto, Member>();
 
             CreateMap<ApiResponse, ApiResponseErrorDto>();
+            CreateMap<Store, StoreDto>();
+
+            CreateMap<NewsDto, News>();
+            CreateMap<News, NewsDto>();
+
+            CreateMap<Product, ProductDto>();
+
+            CreateMap<SocialMedia, SocialMediaDto>();
+
+            CreateMap<ProductCategory, ProductCategoryDto>();
+
+            CreateMap<ProductCategoryImage, ProductCategoryImageDto>();
         }
     }
 }

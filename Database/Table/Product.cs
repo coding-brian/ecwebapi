@@ -17,7 +17,7 @@ public partial class Product : Entity
     public string Description { get; set; }
 
     [Column("start_time", TypeName = "datetime")]
-    public DateTime? StartTime { get; set; }
+    public DateTime StartTime { get; set; }
 
     [Column("end_time", TypeName = "datetime")]
     public DateTime? EndTime { get; set; }
@@ -25,9 +25,9 @@ public partial class Product : Entity
     [Column("is_in_banner")]
     public bool IsInBanner { get; set; }
 
-    [Column("s_new_product")]
-    public bool SNewProduct { get; set; }
+    [Column("is_new_product")]
+    public bool IsNewProduct { get; set; }
 
-    [Column("s_in_homepage")]
-    public bool SInHomepage { get; set; }
+    [Column("is_in_homepage")]
+    public bool IsInHomepage { get; set; }
 }

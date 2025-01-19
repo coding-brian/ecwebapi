@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EcWebapi.Database.Table;
 
-[Table("soical_media")]
-public class SoicalMedia : Entity
+[Table("social_media")]
+public class SocialMedia : Entity
 {
     [Column("name")]
     [StringLength(50)]

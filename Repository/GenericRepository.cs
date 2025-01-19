@@ -63,9 +63,14 @@ namespace EcWebapi.Repository
             if (entity != null) HardDelete(entity);
         }
 
-        public IQueryable<T> Get(Expression<Func<T, bool>> predicate)
+        public IQueryable<T> GetQuerable(Expression<Func<T, bool>> predicate)
         {
             return _context.Set<T>().Where(predicate);
+        }
+
+        public IQueryable<T> GetQuerable()
+        {
+            return _context.Set<T>();
         }
 
         /// <summary>

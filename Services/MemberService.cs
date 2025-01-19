@@ -61,11 +61,13 @@ namespace EcWebapi.Services
         {
             try
             {
-                var member = await _unitOfWork.MemberRepository.GetAsync(e => e.Phone == dto.Phone && e.EntityStatus);
+                var member = await _unitOfWork.MemberRepository.GetAsync(e => e.Phone == dto.Phone
+                                                                              && e.EntityStatus);
 
                 if (member != null) return false;
 
-                var memberCaptcha = _unitOfWork.MemberCaptchaRepository.Get(captcha => captcha.Phone == dto.Phone && captcha.EntityStatus)
+                var memberCaptcha = _unitOfWork.MemberCaptchaRepository.GetQuerable(captcha => captcha.Phone == dto.Phone
+                                                                                               && captcha.EntityStatus)
                                                                        .OrderByDescending(captcha => captcha.CreationTime)
                                                                        .FirstOrDefault();
 

@@ -7,7 +7,13 @@ namespace EcWebapi
     public class UnitOfWork(EcDbContext context,
                             GenericRepository<Member> memberRepository,
                             GenericRepository<MemberCaptcha> memberCaptchaRepository,
-                            GenericRepository<ApiResponse> apiResponseRepository) : IDisposable
+                            GenericRepository<ApiResponse> apiResponseRepository,
+                            GenericRepository<Store> storeRepository,
+                            GenericRepository<News> newsRepository,
+                            GenericRepository<Product> productRepository,
+                            GenericRepository<SocialMedia> socialMediaRepository,
+                            GenericRepository<ProductCategoryImage> productCategoryImageRepository,
+                            GenericRepository<ProductCategory> productCategoryRepository) : IDisposable
     {
         private readonly EcDbContext _context = context;
 
@@ -16,6 +22,14 @@ namespace EcWebapi
         public GenericRepository<MemberCaptcha> MemberCaptchaRepository = memberCaptchaRepository;
 
         public GenericRepository<ApiResponse> ApiResponseRepository = apiResponseRepository;
+
+        public GenericRepository<Store> StoreRepository = storeRepository;
+
+        public GenericRepository<News> NewsRepository = newsRepository;
+        public GenericRepository<Product> ProductRepository = productRepository;
+        public GenericRepository<SocialMedia> SocialMediaRepository = socialMediaRepository;
+        public GenericRepository<ProductCategory> ProductCategoryRepository = productCategoryRepository;
+        public GenericRepository<ProductCategoryImage> ProductCategoryImageRepository = productCategoryImageRepository;
 
         private bool disposed = false;
 
