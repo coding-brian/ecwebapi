@@ -2,7 +2,7 @@
 {
     public class ProductDto
     {
-        public string ProductCode { get; set; }
+        public string Code { get; set; }
 
         public Guid? SkuId { get; set; }
 

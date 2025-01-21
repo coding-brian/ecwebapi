@@ -13,11 +13,6 @@ public class News : Entity
     [Column("content", TypeName = "text")]
     public string Content { get; set; }
 
-    [Required]
-    [Column("image_url")]
-    [StringLength(100)]
-    public string ImageUrl { get; set; }
-
     [Column("start_time", TypeName = "datetime")]
     public DateTime StartTime { get; set; }
 

@@ -4,11 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace EcWebapi.Database.Table;
 
 [Table("product")]
-public partial class Product : Entity
+public class Product : Entity
 {
-    [Column("product_code")]
+    [Column("name")]
     [StringLength(100)]
-    public string ProductCode { get; set; }
+    public string Name { get; set; }
+
+    [Column("code")]
+    [StringLength(100)]
+    public string Code { get; set; }
 
     [Column("sku_id")]
     public Guid? SkuId { get; set; }
