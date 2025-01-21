@@ -2,6 +2,7 @@
 using EcWebapi.Database.Table;
 using EcWebapi.Dto;
 using EcWebapi.Dto.Member;
+using EcWebapi.Dto.Product;
 
 namespace EcWebapi
 {
@@ -29,6 +30,9 @@ namespace EcWebapi
             CreateMap<ProductCategory, ProductCategoryDto>();
 
             CreateMap<ProductCategoryImage, ProductCategoryImageDto>();
+
+            CreateMap<NewsImage, NewsImageDto>();
+            CreateMap<ProductImage, ProductImageDto>();
         }
     }
 }

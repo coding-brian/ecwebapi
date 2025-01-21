@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
 namespace EcWebapi.Database.Table;
 
 [Table("product_image")]
-public partial class ProductImage
+public class ProductImage : Entity
 {
-    [Key]
-    [Column("id")]
-    public Guid Id { get; set; }
-
     [Column("name")]
     [StringLength(100)]
     public string Name { get; set; }

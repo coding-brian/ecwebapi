@@ -1,4 +1,4 @@
-﻿namespace EcWebapi.Dto
+﻿namespace EcWebapi.Dto.Product
 {
     public class ProductDto
     {
@@ -14,8 +14,10 @@
 
         public bool IsInBanner { get; set; }
 
-        public bool SNewProduct { get; set; }
+        public bool IsNewProduct { get; set; }
 
-        public bool SInHomepage { get; set; }
+        public bool IsInHomepage { get; set; }
+
+        public IList<ProductImageDto> Images { get; set; }
     }
 }

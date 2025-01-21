@@ -19,25 +19,24 @@ namespace EcWebapi.Services
 
             var productCategoryImageQuerable = _unitOfWork.ProductCategoryImageRepository.GetQuerable(e => e.EntityStatus);
 
-            var join = await productCategoryQuerable.GroupJoin(productCategoryImageQuerable,
+            var leftJoin = await productCategoryQuerable.GroupJoin(productCategoryImageQuerable,
                                                                category => category.Id,
                                                                image => image.ProductCategoryId,
-                                                               (category, images) => new { category, images })
-                                                    .SelectMany(x => x.images.DefaultIfEmpty(), (category, images) => category)
+                                                               (category, images) => new { Category = category, Images = images.DefaultIfEmpty() })
                                                     .ToListAsync();
 
-            var dtos = new List<ProductCategoryDto>();
+            var productCategories = new List<ProductCategoryDto>();
 
-            foreach (var item in join)
+            foreach (var item in leftJoin)
             {
-                var dto = _mapper.Map<ProductCategoryDto>(item);
+                var productCategory = _mapper.Map<ProductCategoryDto>(item.Category);
 
-                dto.ProductCategoryImages = _mapper.Map<List<ProductCategoryImageDto>>(item.images);
+                productCategory.ProductCategoryImages = _mapper.Map<List<ProductCategoryImageDto>>(item.Images);
 
-                dtos.Add(dto);
+                productCategories.Add(productCategory);
             }
 
-            return dtos;
+            return productCategories;
         }
     }
 }
