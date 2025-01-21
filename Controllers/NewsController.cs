@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EcWebapi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("news")]
     [ApiController]
     public class NewsController(NewsService newsService) : ControllerBase
     {
