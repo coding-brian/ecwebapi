@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace EcWebapi.Database.Table;
 
 [Table("product_category_image")]
-public partial class ProductCategoryImage : Entity
+public class ProductCategoryImage : Entity
 {
     [Required]
     [Column("url")]
@@ -16,4 +16,19 @@ public partial class ProductCategoryImage : Entity
 
     [Column("product_category_id")]
     public Guid ProductCategoryId { get; set; }
+
+    [Column("is_in_banner")]
+    public bool IsInBanner { get; set; }
+
+    [Column("is_active")]
+    public bool IsActive { get; set; }
+
+    [Column("is_desktop_size")]
+    public bool IsDesktopSize { get; set; }
+
+    [Column("is_mobile_size")]
+    public bool IsMobileSize { get; set; }
+
+    [Column("is_tablet_size")]
+    public bool IsTabletSize { get; set; }
 }

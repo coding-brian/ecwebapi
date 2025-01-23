@@ -1,6 +1,6 @@
 ﻿namespace EcWebapi.Dto
 {
-    public class ProductImageDto
+    public class ProductImageDto : EntityDto
     {
         public string Name { get; set; }
 

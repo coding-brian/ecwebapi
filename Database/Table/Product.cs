@@ -34,4 +34,10 @@ public class Product : Entity
 
     [Column("is_in_homepage")]
     public bool IsInHomepage { get; set; }
+
+    [Column("is_in_main_section")]
+    public bool IsInMainSection { get; set; }
+
+    [Column("priority")]
+    public int Priority { get; set; }
 }

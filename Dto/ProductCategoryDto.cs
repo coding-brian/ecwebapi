@@ -10,6 +10,6 @@
 
         public bool IsInHomepage { get; set; }
 
-        public IList<ProductCategoryImageDto> ProductCategoryImages { get; set; }
+        public IList<ProductCategoryImageDto> Images { get; set; }
     }
 }

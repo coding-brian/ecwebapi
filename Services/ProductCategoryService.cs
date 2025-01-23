@@ -31,7 +31,7 @@ namespace EcWebapi.Services
             {
                 var productCategory = _mapper.Map<ProductCategoryDto>(item.Category);
 
-                productCategory.ProductCategoryImages = _mapper.Map<List<ProductCategoryImageDto>>(item.Images);
+                productCategory.Images = _mapper.Map<List<ProductCategoryImageDto>>(item.Images);
 
                 productCategories.Add(productCategory);
             }
