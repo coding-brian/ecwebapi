@@ -1,6 +1,6 @@
 ﻿namespace EcWebapi.Dto
 {
-    public class NewsDto
+    public class NewsDto : EntityDto
     {
         public string Title { get; set; }
 

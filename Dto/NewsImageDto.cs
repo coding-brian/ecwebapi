@@ -1,6 +1,6 @@
 ﻿namespace EcWebapi.Dto
 {
-    public class NewsImageDto
+    public class NewsImageDto : EntityDto
     {
         public Guid NewsId { get; set; }
 

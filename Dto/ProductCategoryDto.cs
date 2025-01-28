@@ -1,4 +1,6 @@
-﻿namespace EcWebapi.Dto
+﻿using EcWebapi.Dto.Product;
+
+namespace EcWebapi.Dto
 {
     public class ProductCategoryDto : EntityDto
     {
@@ -11,5 +13,7 @@
         public bool IsInHomepage { get; set; }
 
         public IList<ProductCategoryImageDto> Images { get; set; }
+
+        public IList<ProductDto> Products { get; set; }
     }
 }

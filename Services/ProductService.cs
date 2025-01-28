@@ -22,7 +22,7 @@ namespace EcWebapi.Services
 
             var operatorQuery = PredicateBuilder.New<Product>(true);
 
-            if (dto.Operator.HasValue)
+            if (dto != null && dto.Operator.HasValue)
             {
                 switch (dto.Operator)
                 {
@@ -41,6 +41,11 @@ namespace EcWebapi.Services
                         {
                             operatorQuery = operatorQuery.Or(e => e.IsInHomepage == dto.IsInHomepage);
                         }
+
+                        if (dto.Id.HasValue)
+                        {
+                            operatorQuery = operatorQuery.Or(e => e.Id == dto.Id.Value);
+                        }
                         break;
 
                     case Operator.And:
@@ -58,6 +63,12 @@ namespace EcWebapi.Services
                         {
                             operatorQuery = operatorQuery.And(e => e.IsInHomepage == dto.IsInHomepage);
                         }
+
+                        if (dto.Id.HasValue)
+                        {
+                            operatorQuery = operatorQuery.And(e => e.Id == dto.Id.Value);
+                        }
+
                         break;
                 }
             }

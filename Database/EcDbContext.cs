@@ -18,5 +18,6 @@ namespace EcWebapi.Database
         public DbSet<ProductCategoryImage> ProductCategoryImages { get; set; }
         public DbSet<NewsImage> NewsImages { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<ProductCategoryMapping> ProductCategoryMappings { get; set; }
     }
 }
