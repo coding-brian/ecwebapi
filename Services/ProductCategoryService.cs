@@ -45,39 +45,36 @@ namespace EcWebapi.Services
         public async Task<ProductCategoryDto> GetAsync(Guid id)
         {
             var categoryQuerable = _unitOfWork.ProductCategoryRepository.GetQuerable(q => q.Id == id && q.EntityStatus);
-            var mappingQuerable = _unitOfWork.ProductCategoryMappingRepository.GetQuerable(q => q.EntityStatus);
-            var productQuerable = _unitOfWork.ProductRepository.GetQuerable(q => q.EntityStatus);
             var productCategoryImageQuerable = _unitOfWork.ProductCategoryImageRepository.GetQuerable(e => e.EntityStatus);
+            var mappingQuerable = _unitOfWork.ProductCategoryMappingRepository.GetQuerable(q => q.EntityStatus);
 
-            var categoryLeftJoinImage = await categoryQuerable.GroupJoin(productCategoryImageQuerable,
-                                                            category => category.Id,
-                                                            image => image.ProductCategoryId,
-                                                            (category, images) => new { Category = category, Images = images.DefaultIfEmpty() })
-                                                 .ToListAsync();
+            var productCategories = await categoryQuerable.GroupJoin(productCategoryImageQuerable, category => category.Id, image => image.ProductCategoryId, (category, images) => new { Category = category, Images = images })
+                                                          .SelectMany(x => x.Images.DefaultIfEmpty(), (x, images) => new { x.Category, Images = images })
+                                                          .GroupJoin(mappingQuerable, leftjoin => leftjoin.Category.Id, mapping => mapping.ProductCategoryId, (leftjoin, mappings) => new { leftjoin.Category, leftjoin.Images, Mappings = mappings })
+                                                          .SelectMany(x => x.Mappings.DefaultIfEmpty(), (a, b) => new { a.Category, a.Images, Mapping = b })
+                                                          .ToListAsync();
 
-            var categoryLeftJoinMapping = categoryLeftJoinImage.GroupJoin(mappingQuerable,
-                                                             leftJoin => leftJoin.Category.Id,
-                                                             mapping => mapping.ProductCategoryId,
-                                                             (category, mappings) => new { Category = category, Mappings = mappings.DefaultIfEmpty() })
-                                                  .SelectMany(x => x.Mappings,
-                                                              (x, mapping) => new { x.Category, Mapping = mapping })
-                                                  .ToList();
-
-            var productCategoryGroup = categoryLeftJoinMapping.GroupJoin(productQuerable,
-                                                                         leftjoin => leftjoin.Mapping.ProductId,
-                                                                         product => product.Id,
-                                                                         (leftjoin, products) => new { leftjoin.Category, leftjoin.Mapping, Products = products.DefaultIfEmpty() })
-                                                              .SelectMany(x => x.Products,
-                                                                          (leftjoin, product) => new { leftjoin.Category, Product = product })
-                                                              .GroupBy(x => x.Category);
+            var products = _unitOfWork.ProductRepository.GetQuerable(product => productCategories.Select(category => category.Mapping.ProductId).Contains(product.Id) && product.EntityStatus)
+                                                        .GroupJoin(_unitOfWork.ProductImageRepository.GetQuerable(e => e.EntityStatus), product => product.Id, image => image.ProductId, (product, images) => new { Product = product, Images = images })
+                                                        .SelectMany(x => x.Images.DefaultIfEmpty(), (a, image) => new { a.Product, Image = image })
+                                                        .ToList()
+                                                        .GroupBy(x => x.Product);
 
             var productCategoryDto = new ProductCategoryDto();
 
-            foreach (var group in productCategoryGroup)
+            foreach (var group in productCategories.GroupBy(x => x.Category))
             {
-                productCategoryDto = _mapper.Map<ProductCategoryDto>(group.Key.Category);
-                productCategoryDto.Images = _mapper.Map<List<ProductCategoryImageDto>>(group.Key.Images);
-                productCategoryDto.Products = _mapper.Map<List<ProductDto>>(group.Select(x => x.Product).ToList());
+                productCategoryDto = _mapper.Map<ProductCategoryDto>(group.Key);
+                productCategoryDto.Images = _mapper.Map<List<ProductCategoryImageDto>>(group.Select(x => x.Images).DistinctBy(x => x.Id).ToList());
+
+                productCategoryDto.Products = new List<ProductDto>();
+                foreach (var productGroup in products.Where(x => group.Select(x => x.Mapping.ProductId).Contains(x.Key.Id)))
+                {
+                    var productDto = _mapper.Map<ProductDto>(productGroup.Key);
+                    productDto.Images = _mapper.Map<List<ProductImageDto>>(productGroup.Select(x => x.Image).OrderBy(image => image.Priority).ToList());
+
+                    productCategoryDto.Products.Add(productDto);
+                }
             }
 
             return productCategoryDto;

@@ -70,7 +70,7 @@ namespace EcWebapi.Repository
 
         public IQueryable<T> GetQuerable()
         {
-            return _context.Set<T>();
+            return _context.Set<T>().AsQueryable();
         }
 
         /// <summary>
