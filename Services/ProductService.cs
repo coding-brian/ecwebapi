@@ -79,12 +79,21 @@ namespace EcWebapi.Services
 
             var productImageQuerable = _unitOfWork.ProductImageRepository.GetQuerable(e => e.IsActive && e.EntityStatus);
 
-            var leftJoin = await productQuerable
-                .Join(_unitOfWork.ProductPriceRepository.GetQuerable(e => e.EntityStatus), product => product.Id, price => price.ProductId, (product, price) => new { Product = product, Price = price })
-                .GroupJoin(productImageQuerable, join => join.Product.Id, image => image.ProductId, (product, images) => new { product.Product, product.Price, Images = images })
-                .SelectMany(x => x.Images.DefaultIfEmpty(), (x, y) => new { x.Product, x.Price, Image = y })
-                .GroupJoin(_unitOfWork.ProductContentRepository.GetQuerable(e => e.EntityStatus), lefjoin => lefjoin.Product.Id, productContent => productContent.ProductId, (x, contents) => new { x.Product, x.Price, x.Image, Contents = contents.DefaultIfEmpty() })
-                .ToListAsync();
+            var leftJoin = await productQuerable.Join(_unitOfWork.ProductPriceRepository.GetQuerable(e => e.EntityStatus),
+                                                      product => product.Id,
+                                                      price => price.ProductId,
+                                                      (product, price) => new { Product = product, Price = price })
+                                                .GroupJoin(productImageQuerable,
+                                                           join => join.Product.Id,
+                                                           image => image.ProductId,
+                                                           (product, images) => new { product.Product, product.Price, Images = images })
+                                                .SelectMany(x => x.Images.DefaultIfEmpty(),
+                                                            (x, y) => new { x.Product, x.Price, Image = y })
+                                                .GroupJoin(_unitOfWork.ProductContentRepository.GetQuerable(e => e.EntityStatus),
+                                                           lefjoin => lefjoin.Product.Id,
+                                                           productContent => productContent.ProductId,
+                                                           (x, contents) => new { x.Product, x.Price, x.Image, Contents = contents.DefaultIfEmpty() })
+                                                .ToListAsync();
 
             var products = new List<ProductDto>();
 
@@ -96,7 +105,7 @@ namespace EcWebapi.Services
 
                 product.Images = _mapper.Map<List<ProductImageDto>>(item.Select(x => x.Image).OrderBy(image => image.Priority).ToList());
 
-                product.Contents = _mapper.Map<List<ProductContentDto>>(item.SelectMany(x => x.Contents).DistinctBy(x => x.Id).ToList());
+                product.Contents = _mapper.Map<List<ProductContentDto>>(item.SelectMany(x => x.Contents).DistinctBy(content => content.Id).OrderBy(content => content.Priority).ToList());
 
                 products.Add(product);
             }
