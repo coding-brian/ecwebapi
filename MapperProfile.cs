@@ -33,6 +33,9 @@ namespace EcWebapi
 
             CreateMap<NewsImage, NewsImageDto>();
             CreateMap<ProductImage, ProductImageDto>();
+
+            CreateMap<ProductContent, ProductContentDto>();
+            CreateMap<ProductPrice, ProductPriceDto>();
         }
     }
 }

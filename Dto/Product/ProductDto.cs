@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace EcWebapi.Dto.Product
+﻿namespace EcWebapi.Dto.Product
 {
     public class ProductDto : EntityDto
     {
@@ -24,9 +22,12 @@ namespace EcWebapi.Dto.Product
 
         public bool IsInMainSection { get; set; }
 
-        [Column("priority")]
         public int Priority { get; set; }
 
         public IList<ProductImageDto> Images { get; set; }
+
+        public ProductPriceDto Price { get; set; }
+
+        public IList<ProductContentDto> Contents { get; set; }
     }
 }

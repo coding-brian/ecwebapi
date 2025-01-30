@@ -79,19 +79,24 @@ namespace EcWebapi.Services
 
             var productImageQuerable = _unitOfWork.ProductImageRepository.GetQuerable(e => e.IsActive && e.EntityStatus);
 
-            var leftJoin = await productQuerable.GroupJoin(productImageQuerable,
-                                                           product => product.Id,
-                                                           image => image.ProductId,
-                                                           (product, images) => new { Product = product, Images = images.DefaultIfEmpty() })
-                                                .ToListAsync();
+            var leftJoin = await productQuerable
+                .Join(_unitOfWork.ProductPriceRepository.GetQuerable(e => e.EntityStatus), product => product.Id, price => price.ProductId, (product, price) => new { Product = product, Price = price })
+                .GroupJoin(productImageQuerable, join => join.Product.Id, image => image.ProductId, (product, images) => new { product.Product, product.Price, Images = images })
+                .SelectMany(x => x.Images.DefaultIfEmpty(), (x, y) => new { x.Product, x.Price, Image = y })
+                .GroupJoin(_unitOfWork.ProductContentRepository.GetQuerable(e => e.EntityStatus), lefjoin => lefjoin.Product.Id, productContent => productContent.ProductId, (x, contents) => new { x.Product, x.Price, x.Image, Contents = contents.DefaultIfEmpty() })
+                .ToListAsync();
 
             var products = new List<ProductDto>();
 
-            foreach (var item in leftJoin)
+            foreach (var item in leftJoin.GroupBy(x => x.Product))
             {
-                var product = _mapper.Map<ProductDto>(item.Product);
+                var product = _mapper.Map<ProductDto>(item.Key);
 
-                product.Images = _mapper.Map<List<ProductImageDto>>(item.Images.OrderBy(image => image.Priority));
+                product.Price = _mapper.Map<ProductPriceDto>(item.Select(x => x.Price).First());
+
+                product.Images = _mapper.Map<List<ProductImageDto>>(item.Select(x => x.Image).OrderBy(image => image.Priority).ToList());
+
+                product.Contents = _mapper.Map<List<ProductContentDto>>(item.SelectMany(x => x.Contents).DistinctBy(x => x.Id).ToList());
 
                 products.Add(product);
             }

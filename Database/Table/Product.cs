@@ -20,6 +20,9 @@ public class Product : Entity
     [Column("description", TypeName = "text")]
     public string Description { get; set; }
 
+    [Column("feature", TypeName = "text")]
+    public string Feature { get; set; }
+
     [Column("start_time", TypeName = "datetime")]
     public DateTime StartTime { get; set; }
 
@@ -39,5 +42,5 @@ public class Product : Entity
     public bool IsInMainSection { get; set; }
 
     [Column("priority")]
-    public int Priority { get; set; }
+    public int? Priority { get; set; }
 }
