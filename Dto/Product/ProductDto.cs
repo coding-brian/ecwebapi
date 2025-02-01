@@ -10,6 +10,8 @@
 
         public string Description { get; set; }
 
+        public string Feature { get; set; }
+
         public DateTime StartTime { get; set; }
 
         public DateTime? EndTime { get; set; }
@@ -29,5 +31,9 @@
         public ProductPriceDto Price { get; set; }
 
         public IList<ProductContentDto> Contents { get; set; }
+
+        public IList<ProductGalleryImageDto> Galleries { get; set; }
+
+        public IList<ProductRelationDto> Relations { get; set; }
     }
 }

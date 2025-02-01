@@ -2,8 +2,6 @@
 {
     public class QueryProductDto
     {
-        public Guid? Id { get; set; }
-
         public bool? IsInBanner { get; set; }
 
         public bool? IsNewProduct { get; set; }

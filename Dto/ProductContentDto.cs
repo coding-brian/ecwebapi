@@ -1,6 +1,6 @@
 ﻿namespace EcWebapi.Dto
 {
-    public class ProductContentDto
+    public class ProductContentDto : EntityDto
     {
         public Guid ProductId { get; set; }
 

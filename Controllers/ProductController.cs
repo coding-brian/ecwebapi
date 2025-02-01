@@ -15,5 +15,11 @@ namespace EcWebapi.Controllers
         {
             return Ok(await _productService.GetAsync(dto));
         }
+
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetAsync(Guid id)
+        {
+            return Ok(await _productService.GetAsync(id));
+        }
     }
 }
