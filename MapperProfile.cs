@@ -39,7 +39,7 @@ namespace EcWebapi
 
             CreateMap<ProductGalleryImage, ProductGalleryImageDto>();
             CreateMap<ProductRelationImage, ProductRelationImageDto>();
-            CreateMap<ProductRelationMapping, ProductRelationDto>();
+            CreateMap<ProductRelationMapping, ProductRelationMappingDto>();
         }
     }
 }

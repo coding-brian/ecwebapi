@@ -34,6 +34,6 @@
 
         public IList<ProductGalleryImageDto> Galleries { get; set; }
 
-        public IList<ProductRelationDto> Relations { get; set; }
+        public IList<ProductRelationMappingDto> Relations { get; set; }
     }
 }

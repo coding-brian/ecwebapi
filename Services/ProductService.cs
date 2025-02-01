@@ -160,11 +160,11 @@ namespace EcWebapi.Services
 
                 if (relations.Count > 0)
                 {
-                    product.Relations = new List<ProductRelationDto>();
+                    product.Relations = new List<ProductRelationMappingDto>();
 
                     foreach (var relation in relations.GroupBy(x => x.Mapping))
                     {
-                        var dto = _mapper.Map<ProductRelationDto>(relation.Key);
+                        var dto = _mapper.Map<ProductRelationMappingDto>(relation.Key);
 
                         var test = relation.Select(x => x.Image).Any(x => x == null) ? null : relation.Select(x => x.Image);
 
