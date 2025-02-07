@@ -10,6 +10,10 @@ public class Product : Entity
     [StringLength(100)]
     public string Name { get; set; }
 
+    [Column("short_name")]
+    [StringLength(50)]
+    public string ShortName { get; set; }
+
     [Column("code")]
     [StringLength(100)]
     public string Code { get; set; }

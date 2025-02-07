@@ -21,7 +21,12 @@ namespace EcWebapi
                             GenericRepository<ProductContent> productContentRepository,
                             GenericRepository<ProductGalleryImage> productGalleryImageRepository,
                             GenericRepository<ProductRelationMapping> productRelationMappingRepository,
-                            GenericRepository<ProductRelationImage> productRelationImageRepository) : IDisposable
+                            GenericRepository<ProductRelationImage> productRelationImageRepository,
+                            GenericRepository<Order> orderRepository,
+                            GenericRepository<OrderCreditCard> orderCreditCardRepository,
+                            GenericRepository<OrderDetail> orderDetailRepository,
+                            GenericRepository<OrderShipment> orderShipmentRepository,
+                            GenericRepository<PaymentMethod> paymentMethodRepository) : IDisposable
     {
         private readonly EcDbContext _context = context;
 
@@ -46,6 +51,11 @@ namespace EcWebapi
         public GenericRepository<ProductGalleryImage> ProductGalleryImageRepository = productGalleryImageRepository;
         public GenericRepository<ProductRelationMapping> ProductRelationMappingRepository = productRelationMappingRepository;
         public GenericRepository<ProductRelationImage> ProductRelationImageRepository = productRelationImageRepository;
+        public GenericRepository<Order> OrderRepository = orderRepository;
+        public GenericRepository<OrderCreditCard> OrderCreditCardRepository = orderCreditCardRepository;
+        public GenericRepository<OrderDetail> OrderDetailRepository = orderDetailRepository;
+        public GenericRepository<OrderShipment> OrderShipmentRepository = orderShipmentRepository;
+        public GenericRepository<PaymentMethod> PaymentMethodRepository = paymentMethodRepository;
 
         private bool disposed = false;
 

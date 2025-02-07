@@ -19,4 +19,10 @@ public class Store : Entity
 
     [Column("is_active")]
     public bool IsActive { get; set; }
+
+    [Column("shipping_fee")]
+    public int ShippingFee { get; set; }
+
+    [Column("tax_rate")]
+    public int TaxRate { get; set; }
 }

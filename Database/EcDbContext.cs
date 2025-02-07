@@ -24,5 +24,10 @@ namespace EcWebapi.Database
         public DbSet<ProductGalleryImage> ProductGalleryImages { get; set; }
         public DbSet<ProductRelationMapping> ProductRelationMappings { get; set; }
         public DbSet<ProductRelationImage> ProductRelationImages { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderCreditCard> OrderCreditCards { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<OrderShipment> OrderShipments { get; set; }
+        public DbSet<PaymentMethod> PaymentMethods { get; set; }
     }
 }
