@@ -74,6 +74,7 @@ namespace EcWebapi.Services
                 if (memberCaptcha == null || memberCaptcha.Code != dto.Captcha) return false;
 
                 member = _mapper.Map<Member>(dto);
+                member.Id = Guid.NewGuid();
                 member.Password = _passwordHasher.HashPassword(member, member.Password);
                 member.IsActive = true;
 
@@ -144,6 +145,7 @@ namespace EcWebapi.Services
 
             await _unitOfWork.MemberCaptchaRepository.CreateAsync(new MemberCaptcha()
             {
+                Id = Guid.NewGuid(),
                 Code = code,
                 Phone = dto.Phone,
             });

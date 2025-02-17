@@ -2,6 +2,8 @@
 using EcWebapi.Database.Table;
 using EcWebapi.Dto;
 using EcWebapi.Dto.Member;
+using EcWebapi.Dto.Order;
+using EcWebapi.Dto.OrderDetail;
 using EcWebapi.Dto.Product;
 
 namespace EcWebapi
@@ -41,6 +43,16 @@ namespace EcWebapi
             CreateMap<ProductRelationImage, ProductRelationImageDto>();
             CreateMap<ProductRelationMapping, ProductRelationMappingDto>();
             CreateMap<PaymentMethod, PaymentMethodDto>();
+            CreateMap<Order, OrderDto>();
+            CreateMap<OrderDto, Order>();
+
+            CreateMap<OrderDetail, OrderDetailDto>();
+            CreateMap<OrderDetailDto, OrderDetail>();
+
+            CreateMap<CreateOrderDto, Order>();
+            CreateMap<CreateOrderShipmentDto, OrderShipment>();
+            CreateMap<CreateOrderDetailDto, OrderDetail>();
+            CreateMap<CreateOrderCreditCardDto, OrderCreditCard>();
         }
     }
 }

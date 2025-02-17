@@ -6,6 +6,9 @@ namespace EcWebapi.Database.Table;
 [Table("order_detail")]
 public class OrderDetail : Entity
 {
+    [Column("order_id")]
+    public Guid OrderId { get; set; }
+
     [Column("product_id")]
     public Guid ProductId { get; set; }
 

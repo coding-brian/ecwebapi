@@ -27,7 +27,6 @@ namespace EcWebapi.Repository
         {
             entity.CreationTime = DateTime.Now;
             entity.EntityStatus = true;
-            entity.Id = Guid.NewGuid();
 
             entity.CreateBy = _payload.Id.Value;
 
