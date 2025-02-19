@@ -4,10 +4,10 @@
     {
         public Guid ProductId { get; set; }
 
-        public Guid SkuId { get; set; }
+        public Guid? SkuId { get; set; }
 
-        public int Amount { get; set; }
+        public int Quantity { get; set; }
 
-        public decimal Price { get; set; }
+        public decimal SalePrice { get; set; }
     }
 }

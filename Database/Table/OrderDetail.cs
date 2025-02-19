@@ -15,10 +15,10 @@ public class OrderDetail : Entity
     [Column("sku_id")]
     public Guid SkuId { get; set; }
 
-    [Column("amount")]
-    public int Amount { get; set; }
+    [Column("quantity")]
+    public int Quantity { get; set; }
 
-    [Column("price")]
+    [Column("salePrice")]
     [Precision(10, 2)]
-    public decimal Price { get; set; }
+    public decimal SalePrice { get; set; }
 }

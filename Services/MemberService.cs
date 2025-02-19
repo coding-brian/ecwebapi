@@ -132,7 +132,12 @@ namespace EcWebapi.Services
             var memberCaptchas = await _unitOfWork.MemberCaptchaRepository.GetListAsync(captcha => captcha.Phone == dto.Phone
                                                                                                    && captcha.CreationTime >= timeDifference
                                                                                                    && captcha.EntityStatus);
-            if (memberCaptchas.Count > 0) return null;
+
+            if (memberCaptchas.Count > 0)
+            {
+                var captcha = memberCaptchas.OrderByDescending(captcha => captcha.CreationTime).FirstOrDefault();
+                return captcha.Code;
+            };
 
             var random = new Random();
             string code = "";
