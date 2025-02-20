@@ -10,6 +10,7 @@ using System.Text;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information() // 設定最低日誌級別
+    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Warning) // 過濾 EF Core SQL
     .WriteTo.Console()    // 將日誌輸出到 Console
     .Enrich.FromLogContext() // 添加額外的日誌上下文（例如 RequestId）
     .CreateLogger();
