@@ -105,6 +105,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseForwardedHeaders();
+
 app.UseHealthChecks("/health");
 
 app.UseHttpsRedirection();
