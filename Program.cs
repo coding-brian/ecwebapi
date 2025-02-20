@@ -22,8 +22,6 @@ builder.Services.AddHealthChecks();
 var corsPolicyName = "MyCorsPolicy";
 builder.Services.AddCors(options =>
 {
-    var allowHosts = builder.Configuration.GetSection("AllowedHosts").ToString();
-
     if (builder.Environment.IsDevelopment())
     {
         options.AddPolicy(corsPolicyName, policy =>
@@ -35,9 +33,11 @@ builder.Services.AddCors(options =>
     }
     else
     {
+        var cors = builder.Configuration.GetSection("Cors").Get<string[]>();
+
         options.AddPolicy(corsPolicyName, policy =>
         {
-            policy.WithOrigins(allowHosts) // 允許的來源
+            policy.WithOrigins(cors) // 允許的來源
                   .AllowAnyHeader() // 允許的標頭
                   .AllowAnyMethod() // 允許的 HTTP 方法 (GET, POST, PUT, DELETE 等)
                   .AllowCredentials(); // 如果需要攜帶 Cookie 或憑證
