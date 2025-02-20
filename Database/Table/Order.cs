@@ -21,9 +21,9 @@ public class Order : Entity
     [Precision(10, 2)]
     public decimal Vat { get; set; }
 
-    [Column("grant_total")]
+    [Column("grand_total")]
     [Precision(10, 2)]
-    public decimal GrantTotal { get; set; }
+    public decimal Grandtotal { get; set; }
 
     [Column("payment_method_id")]
     public Guid PaymentMethodId { get; set; }

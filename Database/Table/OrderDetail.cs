@@ -18,7 +18,7 @@ public class OrderDetail : Entity
     [Column("quantity")]
     public int Quantity { get; set; }
 
-    [Column("salePrice")]
+    [Column("sale_price")]
     [Precision(10, 2)]
     public decimal SalePrice { get; set; }
 }

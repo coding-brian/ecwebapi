@@ -53,6 +53,7 @@ namespace EcWebapi
             CreateMap<CreateOrderShipmentDto, OrderShipment>();
             CreateMap<CreateOrderDetailDto, OrderDetail>();
             CreateMap<CreateOrderCreditCardDto, OrderCreditCard>();
+            CreateMap<Product, OrderDetailProductDto>();
         }
     }
 }

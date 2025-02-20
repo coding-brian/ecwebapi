@@ -9,13 +9,26 @@ namespace EcWebapi.Services
 
         public PayloadDto GetPayload()
         {
-            var claims = _httpContextAccessor.HttpContext.User.Claims;
-            Guid.TryParse(claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Sub)?.Value, out Guid id);
+            var authorization = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].FirstOrDefault();
+
+            if (authorization != null && authorization.StartsWith("Bearer"))
+            {
+                var token = authorization.Substring("Bearer ".Length).Trim();
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var jwtToken = tokenHandler.ReadJwtToken(token);
+                Guid.TryParse(jwtToken.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Sub)?.Value, out Guid id);
+
+                return new PayloadDto()
+                {
+                    Id = id,
+                    Eamil = jwtToken.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Email)?.Value
+                };
+            }
 
             return new PayloadDto()
             {
-                Id = id,
-                Eamil = claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Email)?.Value
+                Id = Guid.Empty,
+                Eamil = null
             };
         }
     }

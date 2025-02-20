@@ -7,9 +7,6 @@ namespace EcWebapi.Dto.Order
     public class CreateOrderDto
     {
         [Required]
-        public Guid MemberId { get; set; }
-
-        [Required]
         public decimal ShippingFee { get; set; }
 
         [Required]
@@ -19,7 +16,7 @@ namespace EcWebapi.Dto.Order
         public decimal Vat { get; set; }
 
         [Required]
-        public decimal GrantTotal { get; set; }
+        public decimal Grandtotal { get; set; }
 
         [Required]
         public Guid PaymentMethodId { get; set; }

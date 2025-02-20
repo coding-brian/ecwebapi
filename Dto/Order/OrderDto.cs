@@ -1,4 +1,6 @@
-﻿namespace EcWebapi.Dto.Order
+﻿using EcWebapi.Dto.OrderDetail;
+
+namespace EcWebapi.Dto.Order
 {
     public class OrderDto : EntityDto
     {
@@ -10,8 +12,10 @@
 
         public decimal Vat { get; set; }
 
-        public decimal GrantTotal { get; set; }
+        public decimal GrandTotal { get; set; }
 
         public Guid PaymentMethodId { get; set; }
+
+        public IList<OrderDetailDto> Details { get; set; }
     }
 }

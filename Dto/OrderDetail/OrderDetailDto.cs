@@ -6,8 +6,17 @@
 
         public Guid SkuId { get; set; }
 
-        public int Amount { get; set; }
+        public int Quantity { get; set; }
 
-        public decimal Price { get; set; }
+        public decimal SalePrice { get; set; }
+
+        public OrderDetailProductDto Product { get; set; }
+    }
+
+    public class OrderDetailProductDto : EntityDto
+    {
+        public IList<ProductImageDto> Images { get; set; }
+
+        public string ShortName { get; set; }
     }
 }
